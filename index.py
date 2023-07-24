@@ -1,21 +1,29 @@
-from robolink import Robolink  # Importa el módulo de conexión con RoboDK
-from robodk import *    # Importa la librería de funciones matemáticas
 
-# Inicializa la conexión con RoboDK
-RDK = Robolink()
+from robodk import *      # RoboDK API
+from robolink import *    # Robot toolbox
 
-# Obtiene el brazo robótico en el espacio de trabajo (asegúrate de que el nombre coincida)
-robot = RDK.Item('Nombre_del_Brazo_Robotico')
+RDK = robolink.Robolink()
 
-# Define las posiciones iniciales y finales de las articulaciones
-pos_inicial = [90, 90, 0]  # [anguloHombro, anguloCodo, anguloPinza]
-pos_final = [120, 45, 90]  # [anguloHombro, anguloCodo, anguloPinza]
+robot = RDK.Item('%RoboDK items%')
 
-# Define la velocidad de movimiento de las articulaciones (en grados por segundo)
-velocidad = 30
 
-# Mueve el brazo robótico a la posición inicial
-robot.MoveJ(pos_inicial, velocidad)
+pos_inicial = [0.000000, -90.000000, 85.150000, 0.000000, 0.000000, 0.000000]
+pos_final = [-150.000000, -33.510000, 62.000000, 0.000000, -51.920000, -171.680000]
+pos_added = [-50.000000, -113.510000, 62.000000, 0.000000, -71.920000, -111.680000]
 
-# Mueve el brazo robótico a la posición final
-# robot.MoveJ(pos_final, velocidad)
+# Program example:
+item = RDK.Item('base')
+
+if item.Valid():
+    for i in range(0,3):
+        robot.MoveJ(pos_inicial)
+        robot.MoveJ(pos_final)   
+    time.sleep(.8)     
+
+    for i in range(0,5):
+        robot.MoveJ(pos_added)
+        time.sleep(.5)
+
+print('Items in the station:')
+itemlist = RDK.ItemList()
+print(itemlist)
